@@ -24,6 +24,9 @@ public class Livro {
 		private String nome;
 		
 		@JsonInclude(Include.NON_NULL)
+		private String autor;
+		
+		@JsonInclude(Include.NON_NULL)
 		private Date publicacao;
 		
 		@JsonInclude(Include.NON_NULL)
@@ -55,6 +58,13 @@ public class Livro {
 		}
 		public void setNome(String nome) {
 			this.nome = nome;
+		}
+		
+		public String getAutor() {
+			return autor;
+		}
+		public void setAutor(String autor) {
+			this.autor = autor;
 		}
 		public Date getPublicacao() {
 			return publicacao;
