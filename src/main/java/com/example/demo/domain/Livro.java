@@ -7,26 +7,32 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity
 public class Livro {
 
-		@JsonInclude(Include.NON_NULL)
+		@JsonInclude(Include.NON_NULL) // Inclui somente atributos não nulos
 		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
+		@GeneratedValue(strategy = GenerationType.IDENTITY) //estratégia de identidade 
 		private Long id;
 		
 		@JsonInclude(Include.NON_NULL)
 		private String nome;
 		
+		@ManyToOne
+		@JoinColumn(name = "AUTOR_ID") //join na coluna para criar autor id
 		@JsonInclude(Include.NON_NULL)
-		private String autor;
+		private Autor autor;
 		
 		@JsonInclude(Include.NON_NULL)
+		@JsonFormat(pattern = "dd/MM/yyyy") //ajusta padrão do formado do json
 		private Date publicacao;
 		
 		@JsonInclude(Include.NON_NULL)
@@ -36,7 +42,7 @@ public class Livro {
 		private String resumo;
 		
 		@JsonInclude(Include.NON_NULL)
-		@Transient
+		@OneToMany(mappedBy = "livro")
 		private List<Comentarios> comentarios;
 		
 		
@@ -60,10 +66,10 @@ public class Livro {
 			this.nome = nome;
 		}
 		
-		public String getAutor() {
+		public Autor getAutor() {
 			return autor;
 		}
-		public void setAutor(String autor) {
+		public void setAutor(Autor autor) {
 			this.autor = autor;
 		}
 		public Date getPublicacao() {

@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.Comentarios;
 import com.example.demo.domain.Livro;
+import com.example.demo.repository.ComentariosRepository;
 import com.example.demo.repository.LivrosRepository;
 import com.example.demo.services.exceptions.LivroNaoEncontradoException;
 
@@ -17,6 +20,9 @@ import com.example.demo.services.exceptions.LivroNaoEncontradoException;
 public class LivrosService {
 	@Autowired
 	private LivrosRepository livrosRepository;
+	
+	@Autowired
+	private ComentariosRepository comentariosRepository;
 	
 	public List<Livro> listar(){
 		return livrosRepository.findAll();
@@ -52,5 +58,19 @@ public class LivrosService {
 	
 	private void verificarExistencia(Livro livro) {
 		buscar(livro.getId());
+	}
+	
+	public Comentarios salvarComentario(Long livroId, Comentarios comentario) {
+		Livro livro = buscar(livroId).get(); // utilizar get()
+		
+		comentario.setLivro(livro);
+		comentario.setData(new Date());
+		
+		return comentariosRepository.save(comentario);
+	}
+	
+	public List<Comentarios> listarComentarios(Long livroId){
+		Livro livro = buscar(livroId).get();
+		return livro.getComentarios();
 	}
 }
